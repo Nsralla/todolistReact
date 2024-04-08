@@ -1,0 +1,8 @@
+.mainDiv{
+    width: 100%;
+    border: 4px solid white;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    height: 100%;
+}

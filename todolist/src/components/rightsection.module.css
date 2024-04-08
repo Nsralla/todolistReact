@@ -1,0 +1,202 @@
+
+.rightsideMainDiv{
+  padding-left: 10%;
+  
+}
+.rightsideMainDiv h1{
+  margin: 0;
+  padding: 0;
+  font-weight: 900;
+}
+
+.rightsideMainDiv h2{
+  margin: 15px;
+}
+.taskinputDiv {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 6px 10px;
+  gap: 10px; /* Space between items */
+  max-width: 80%;
+  margin-top: 20px;
+}
+
+.time {
+  font-family: Arial, sans-serif; /* Sets the font */
+  font-size: 16px; /* Sets the size of the font */
+  color: #333; /* Sets the text color */
+  border: 1px solid #ccc; /* Sets the border */
+  border-radius: 4px; /* Adds rounded corners to the border */
+  padding: 8px 12px; /* Sets the padding inside the input */
+  background-color: #fff; /* Sets the background color */
+  outline: none; /* Removes the default focus outline */
+  /* justify-self: flex-end;
+   */
+  margin-left: 35%;
+}
+
+
+
+/* CSS */
+.button5 {
+  align-items: center;
+  background-clip: padding-box;
+  background-color: #fa6400;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.;
+  margin: 0;
+  min-height: 3rem;
+  
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+ 
+}
+
+.button5:hover,
+.button5:focus {
+  background-color: #fb8332;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.button5:hover {
+  transform: translateY(-1px);
+}
+
+.button5:active {
+  background-color: #c85000;
+  box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+  transform: translateY(0);
+}
+
+
+.time:focus {
+  border-color: #4A90E2; /* Changes border color on focus */
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25); /* Adds a glow effect on focus */
+}
+
+
+ .statusdot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+ .blue {
+  background-color: #052659;
+}
+
+ .green {
+  background-color: #0f969c;
+}
+
+ .yellow {
+  background-color: #D59D80;
+}
+
+.taskinput {
+  border: none;
+  outline: none;
+  flex-grow: 1fr; /* Input will fill the space */
+}
+
+.taskinputIcon {
+  cursor: pointer;
+}
+
+.taskinput .pick-time {
+  margin-right: 10px; /* Space before the custom icon */
+}
+
+/* DYNAMICLLY ADDED TODOS  */
+
+
+.todoItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: black;
+    width: 80%;
+    margin-top: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.actionsDiv{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.todoItem input[type='checkbox'] {
+    margin-right: 15px;
+}
+
+.todoItem span {
+    font-size: 14px;
+    margin-right: 10px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.todoItem span.blue {
+    background-color: #007bff;
+}
+
+.todoItem span.green {
+    background-color: #28a745;
+}
+
+.todoItem span.yellow {
+    background-color: #ffc107;
+}
+
+.todoItem p {
+    margin: 0;
+    flex-grow: 1;
+}
+
+.todoTime {
+    margin-left: auto;
+    margin-right: 20px;
+    color: #888888;
+}
+
+.fa-pen,
+.fa-trash {
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.fa-trash {
+    color: #dc3545;
+}
+
+.fa-pen {
+    color: #ffc107;
+}
+
