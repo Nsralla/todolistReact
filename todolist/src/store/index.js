@@ -21,7 +21,6 @@ const todoListSlice = createSlice({
         toggleDone(state, action) {
                 return state.map((item) => {
                 if (item.id === action.payload) {
-                // Toggle the isDone property of the matched item
                 return { ...item, isDone: !item.isDone };
                 }
             // Return all other items unchanged
@@ -30,8 +29,14 @@ const todoListSlice = createSlice({
             },
 
         editTodo: (state, action) => {
-        const { index, newValue } = action.payload;
-        state[index] = newValue;
+        const { id, title } = action.payload;
+            return state.map((item) => {
+            if (item.id === id) {
+                return { ...item, title};
+            }
+            // Return all other items unchanged
+            return item;
+            });
         },
     },
     });

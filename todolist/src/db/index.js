@@ -1,9 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { deleteDoc, getFirestore } from "firebase/firestore";
+import { deleteDoc, getFirestore, updateDoc } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 import { collection, addDoc, getDocs } from "firebase/firestore";
-import { addTodo, removeTodo, setTodos } from "../store/index.js";
+import { addTodo, editTodo, removeTodo, setTodos, toggleDone } from "../store/index.js";
 import {  doc } from "firebase/firestore";
 
 
@@ -52,5 +52,32 @@ export const deleteTodoAsync = (id) => async (dispatch) => {
         console.error("Error deleting document: ", error);
     }
 };
+
+export const toggleTodoAsync = (todo) => async (dispatch) => {
+    try {
+        const todoRef = doc(db, "todos", todo.id);
+        await updateDoc(todoRef, { isDone: !todo.isDone });
+        console.log("Document updated with ID: ", todo.id);
+        dispatch(toggleDone(todo.id));
+    } catch (error) {
+        console.error("Error updating document: ", error);
+    }
+};
+
+export const handleUpdate = (id, newTitle) => async(dispatch)=>{
+    try{
+        console.log("handleUpdate");
+        console.log(2, id, newTitle);
+         // Update in Firestore
+        const todoRef = doc(db, "todos", id);
+        await updateDoc(todoRef, { title: newTitle });
+        console.log("Document updated with ID: ", id);
+        // Optionally, dispatch an action to update the Redux state
+        dispatch(editTodo({ id, title: newTitle }));
+    }catch(error){
+        console.error(error);
+    }
+};
+
 
 

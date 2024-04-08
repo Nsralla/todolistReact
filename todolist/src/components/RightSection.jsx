@@ -3,11 +3,12 @@ import {useSelector} from 'react-redux';
 import {  useEffect, useRef, useState } from 'react';
 import {addTodoAsync, deleteTodoAsync, fetchTodos} from '../db/index.js';
 import { useDispatch } from "react-redux";
-import { toggleDone } from '../store/index.js';
-
+import { toggleTodoAsync } from '../db/index.js';
+import { handleUpdate } from '../db/index.js';
 export default function RightSection(){
 
     const [isLoading, setIsLoading] = useState(false);
+    const [editingId, setEditingId] = useState(null);
     const dispatch = useDispatch();
     // FETCH TODOS FROM DATA BASE
     useEffect(()=>{
@@ -31,11 +32,11 @@ export default function RightSection(){
         event.preventDefault();
         setIsLoading(true);
         const title = inputRef.current.value;
-        // const id = generateRandomID();
         const time = timeRef.current.value;
         const todo = {title,time,type,color, isDone:false};
         await dispatch(addTodoAsync(todo));
         setIsLoading(false);
+        inputRef.current.value = '';
     }
 
     async function handleDeleteTodo(id) {
@@ -56,7 +57,23 @@ export default function RightSection(){
         setType(type);
     }
 
-    console.log(todolist);
+
+// handle toggle
+async function handleToggle(todo) {
+    console.log(1);
+    setIsLoading(true);
+    await dispatch(toggleTodoAsync(todo));
+    console.log(2);
+    setIsLoading(false);
+}
+
+// Assuming `handleChangingTask` is defined inside a React component
+async function handleChangingTask(id, newTitle){
+    console.log(id, newTitle);
+    // Correct use of dispatch with async action creator
+    await dispatch(handleUpdate(id, newTitle));
+    setEditingId(null);
+}
 
     return (
     <div className={classes.rightsideMainDiv}>
@@ -79,19 +96,28 @@ export default function RightSection(){
         </div>
 
 {/* Loading spinner */}
-        {isLoading && <div className={classes.loadingstate}>
+        {(isLoading )&& <div className={classes.loadingstate}>
                                     <div className={classes.loading}>     
                                     </div>
                                 </div>}
 {/* PRINT TODOS */}
         {todolist.length > 0  && todolist.map((todo)=>(
             <div key={todo.id} className={classes.todoItem }>
-                        <input onClick={()=>{dispatch(toggleDone(todo.id))}} type='checkbox'/>
-                        <span className={`${classes[todo.color]} ${classes.statusdot}`}></span>
+                        <input
+                            checked={todo.isDone}
+                            onChange={()=>handleToggle(todo)}
+                            type='checkbox'/>
+                        <span
+                            className={`${classes[todo.color]} ${classes.statusdot}`}>
+                        </span>
+                        {editingId === todo.id ? (
+                        <input  style={{width:'80%'}} defaultValue={todo.title} onBlur={(e) => {handleChangingTask(todo.id, e.target.value)}} />
+                        ) : (
                         <p>{todo.title}</p>
+                        )}
                         <div className={classes.actionsDiv}>
                             <p>{todo.time}</p>
-                            <i style={{cursor:"pointer"}} className="fa-solid fa-pen"></i>
+                            <i style={{cursor:"pointer"}} className="fa-solid fa-pen" onClick={() => setEditingId(todo.id)}></i>
                             <i style={{cursor:"pointer"}} className="fa-solid fa-trash" onClick={()=>handleDeleteTodo(todo.id)}></i>
                         </div>
             </div>
@@ -100,18 +126,3 @@ export default function RightSection(){
     </div>
     );
 }
-
-
-// function generateRandomID() {
-//     const characters =
-//         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
-//     // Generate a random ID of length 20
-//     let id = "";
-//     for (let i = 0; i < 20; i++) {
-//         // Generate a random index for the characters string
-//         const index = Math.floor(Math.random() * characters.length);
-//         // Add the character at the random index to the ID
-//         id += characters[index];
-//     }
-//     return id;
-// }
