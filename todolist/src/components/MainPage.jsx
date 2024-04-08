@@ -5,6 +5,7 @@ export default function MainPage(){
     return(
         <div className={classes.mainDiv}>
             <LeftSide/>
+            
             <RightSection/>
         </div>
     );
