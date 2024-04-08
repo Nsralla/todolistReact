@@ -1,5 +1,6 @@
 import classes from './leftside.module.css';
 import image from '../assets/profile.jpg';
+import { Link } from 'react-router-dom';
 export default function LeftSide(){
     return(
         <section className={classes.mainSection} >
@@ -39,7 +40,7 @@ export default function LeftSide(){
 
 
             <div>
-                <h2 style={{color:'#f39f5a', cursor:'pointer'}}> <i style={{paddingRight:'6px'}} className="fa-solid fa-calendar-days"></i>Schedule task</h2>
+                <Link to="/addTodo" style={{color:'#f39f5a', cursor:'pointer'}}> <i style={{paddingRight:'6px'}} className="fa-solid fa-calendar-days"></i>Schedule task</Link>
             </div>
         </section>
     );
