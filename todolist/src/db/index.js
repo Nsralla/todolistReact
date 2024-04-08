@@ -1,9 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { deleteDoc, getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 import { collection, addDoc, getDocs } from "firebase/firestore";
-import { addTodo, setTodos } from "../store/index.js";
+import { addTodo, removeTodo, setTodos } from "../store/index.js";
+import {  doc } from "firebase/firestore";
 
 
 
@@ -29,7 +30,8 @@ export const addTodoAsync = (todo) => async (dispatch) => {
     try {
         const docRef = await addDoc(collection(db, "todos"), todo);
         console.log("Document written with ID: ", docRef.id);
-        dispatch(addTodo(todo));
+        const newTodo = { id: docRef.id, ...todo };
+        dispatch(addTodo(newTodo));
         } catch (error) {
         console.error("Error adding document: ", error);
     }
@@ -38,8 +40,17 @@ export const addTodoAsync = (todo) => async (dispatch) => {
 // Async function to fetch todos from Firestore
 export const fetchTodos = () => async (dispatch) => {
     const querySnapshot = await getDocs(collection(db, "todos"));
-    const todos = querySnapshot.docs.map(doc => ({ ...doc.data()}));
+    const todos = querySnapshot.docs.map(doc => ({ id:doc.id,...doc.data()}));
     dispatch(setTodos(todos));
+};
+export const deleteTodoAsync = (id) => async (dispatch) => {
+    try {
+        if (!id) throw new Error("Document ID is undefined.");
+        await deleteDoc(doc(db, "todos", id));
+        dispatch(removeTodo(id));
+    } catch (error) {
+        console.error("Error deleting document: ", error);
+    }
 };
 
 

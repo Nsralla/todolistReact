@@ -18,6 +18,7 @@ const todoListSlice = createSlice({
         removeTodo: (state, action) => {
         return state.filter((todo)=>(todo.id !== action.payload))
         },
+        
         editTodo: (state, action) => {
         const { index, newValue } = action.payload;
         state[index] = newValue;

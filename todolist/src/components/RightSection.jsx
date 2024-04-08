@@ -1,7 +1,7 @@
 import classes from './rightsection.module.css';
 import {useSelector} from 'react-redux';
 import {  useEffect, useRef, useState } from 'react';
-import {addTodoAsync, fetchTodos} from '../db/index.js';
+import {addTodoAsync, deleteTodoAsync, fetchTodos} from '../db/index.js';
 import { useDispatch } from "react-redux";
 
 export default function RightSection(){
@@ -30,20 +30,31 @@ export default function RightSection(){
         event.preventDefault();
         setIsLoading(true);
         const title = inputRef.current.value;
-        const id = generateRandomID();
+        // const id = generateRandomID();
         const time = timeRef.current.value;
-        const todo = {id,title,time,type,color, isDone:'false'};
+        const todo = {title,time,type,color, isDone:'false'};
         await dispatch(addTodoAsync(todo));
         setIsLoading(false);
     }
+
+    async function handleDeleteTodo(id) {
+        setIsLoading(true);
+        try {
+            await dispatch(deleteTodoAsync(id)); // Corrected the typo here
+        } catch (error) {
+            console.error("Error deleting todo: ", error);
+            // Optionally handle the error state here (e.g., show an error message to the user)
+        }
+        setIsLoading(false);
+}
 
 
 // handle choosing the color and the type
     function handleColorType(color,type){
         setColor(color);
         setType(type);
-        console.log(color, type)
     }
+
 
     return (
     <div className={classes.rightsideMainDiv}>
@@ -79,7 +90,7 @@ export default function RightSection(){
                         <div className={classes.actionsDiv}>
                             <p>{todo.time}</p>
                             <i style={{cursor:"pointer"}} className="fa-solid fa-pen"></i>
-                            <i style={{cursor:"pointer"}} className="fa-solid fa-trash"></i>
+                            <i style={{cursor:"pointer"}} className="fa-solid fa-trash" onClick={()=>handleDeleteTodo(todo.id)}></i>
                         </div>
             </div>
         ))}
@@ -89,16 +100,16 @@ export default function RightSection(){
 }
 
 
-function generateRandomID() {
-    const characters =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
-    // Generate a random ID of length 20
-    let id = "";
-    for (let i = 0; i < 20; i++) {
-        // Generate a random index for the characters string
-        const index = Math.floor(Math.random() * characters.length);
-        // Add the character at the random index to the ID
-        id += characters[index];
-    }
-    return id;
-}
+// function generateRandomID() {
+//     const characters =
+//         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
+//     // Generate a random ID of length 20
+//     let id = "";
+//     for (let i = 0; i < 20; i++) {
+//         // Generate a random index for the characters string
+//         const index = Math.floor(Math.random() * characters.length);
+//         // Add the character at the random index to the ID
+//         id += characters[index];
+//     }
+//     return id;
+// }
