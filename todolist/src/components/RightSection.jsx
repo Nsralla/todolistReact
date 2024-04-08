@@ -35,9 +35,9 @@ export default function RightSection(){
         <h2>Today Main Focus</h2>
         <h1>Add Teams Meetings</h1>
         <div className={classes.taskinputDiv}>
-            <span onClick={()=>{handleColorType('blue','personal')}} className={`${classes.statusdot} ${classes.blue}`}></span>
-            <span onClick={()=>{handleColorType('green','freelance')}} className={`${classes.statusdot} ${classes.green}`}></span>
-            <span onClick={()=>{handleColorType('yellow', 'work')}} className={`${classes.statusdot} ${classes.yellow}`}></span>
+            <span style={{cursor:'pointer'}} onClick={()=>{handleColorType('blue','personal')}} className={`${classes.statusdot} ${classes.blue}`}></span>
+            <span style={{cursor:'pointer'}}  onClick={()=>{handleColorType('green','freelance')}} className={`${classes.statusdot} ${classes.green}`}></span>
+            <span style={{cursor:'pointer'}}  onClick={()=>{handleColorType('yellow', 'work')}} className={`${classes.statusdot} ${classes.yellow}`}></span>
             <input
             ref={inputRef}
                 className={classes.taskinput}
