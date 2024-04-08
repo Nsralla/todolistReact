@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 import {  useEffect, useRef, useState } from 'react';
 import {addTodoAsync, deleteTodoAsync, fetchTodos} from '../db/index.js';
 import { useDispatch } from "react-redux";
+import { toggleDone } from '../store/index.js';
 
 export default function RightSection(){
 
@@ -32,7 +33,7 @@ export default function RightSection(){
         const title = inputRef.current.value;
         // const id = generateRandomID();
         const time = timeRef.current.value;
-        const todo = {title,time,type,color, isDone:'false'};
+        const todo = {title,time,type,color, isDone:false};
         await dispatch(addTodoAsync(todo));
         setIsLoading(false);
     }
@@ -55,6 +56,7 @@ export default function RightSection(){
         setType(type);
     }
 
+    console.log(todolist);
 
     return (
     <div className={classes.rightsideMainDiv}>
@@ -84,7 +86,7 @@ export default function RightSection(){
 {/* PRINT TODOS */}
         {todolist.length > 0  && todolist.map((todo)=>(
             <div key={todo.id} className={classes.todoItem }>
-                        <input type='checkbox'/>
+                        <input onClick={()=>{dispatch(toggleDone(todo.id))}} type='checkbox'/>
                         <span className={`${classes[todo.color]} ${classes.statusdot}`}></span>
                         <p>{todo.title}</p>
                         <div className={classes.actionsDiv}>
