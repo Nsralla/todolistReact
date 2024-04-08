@@ -1,27 +1,42 @@
 import classes from './rightsection.module.css';
-import { addTodo } from '../store/index.js';
 import {useSelector} from 'react-redux';
-import {  useRef, useState } from 'react';
-import {useDispatch} from 'react-redux'
+import {  useEffect, useRef, useState } from 'react';
+import {addTodoAsync, fetchTodos} from '../db/index.js';
+import { useDispatch } from "react-redux";
 
 export default function RightSection(){
+
+    const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useDispatch();
+    // FETCH TODOS FROM DATA BASE
+    useEffect(()=>{
+        async function fetchtodosDb(){
+            setIsLoading(true);
+            await dispatch(fetchTodos());
+            setIsLoading(false);
+        }
+        fetchtodosDb();
+    },[dispatch]);
+
     const todolist = useSelector((state)=>state.todolist);
     const [color,setColor] = useState('blue');
     const [type, setType] = useState('freelance');
 
-
-    const dispatch = useDispatch();
     const inputRef = useRef();
     const timeRef = useRef();
-
+    
 //  handle adding todo
-    function handleSubmit(event){
+    async function handleSubmit(event){
         event.preventDefault();
+        setIsLoading(true);
         const title = inputRef.current.value;
         const id = generateRandomID();
         const time = timeRef.current.value;
-        dispatch(addTodo({id,title,time,type,color}));
+        const todo = {id,title,time,type,color, isDone:'false'};
+        await dispatch(addTodoAsync(todo));
+        setIsLoading(false);
     }
+
 
 // handle choosing the color and the type
     function handleColorType(color,type){
@@ -34,6 +49,7 @@ export default function RightSection(){
     <div className={classes.rightsideMainDiv}>
         <h2>Today Main Focus</h2>
         <h1>Add Teams Meetings</h1>
+
         <div className={classes.taskinputDiv}>
             <span style={{cursor:'pointer'}} onClick={()=>{handleColorType('blue','personal')}} className={`${classes.statusdot} ${classes.blue}`}></span>
             <span style={{cursor:'pointer'}}  onClick={()=>{handleColorType('green','freelance')}} className={`${classes.statusdot} ${classes.green}`}></span>
@@ -49,6 +65,12 @@ export default function RightSection(){
             <button className={classes.button5} onClick={handleSubmit}>Add Task</button>
         </div>
 
+{/* Loading spinner */}
+        {isLoading && <div className={classes.loadingstate}>
+                                    <div className={classes.loading}>     
+                                    </div>
+                                </div>}
+{/* PRINT TODOS */}
         {todolist.length > 0  && todolist.map((todo)=>(
             <div key={todo.id} className={classes.todoItem }>
                         <input type='checkbox'/>
@@ -56,8 +78,8 @@ export default function RightSection(){
                         <p>{todo.title}</p>
                         <div className={classes.actionsDiv}>
                             <p>{todo.time}</p>
-                            <i className="fa-solid fa-pen"></i>
-                            <i className="fa-solid fa-trash"></i>
+                            <i style={{cursor:"pointer"}} className="fa-solid fa-pen"></i>
+                            <i style={{cursor:"pointer"}} className="fa-solid fa-trash"></i>
                         </div>
             </div>
         ))}

@@ -23,17 +23,17 @@ export default function LeftSide(){
                 <ul>
                     <li>
                         <span className={`${classes.statusdot} ${classes.blue}`}></span>
-                        <span style={{textAlign:'center', padding:'0', margin:'0', paddingLeft:'4px',  cursor:'pointer'}}>personal</span>
+                        <Link to='/blue' style={{textAlign:'center', padding:'0', margin:'0', paddingLeft:'4px',  cursor:'pointer', textDecoration:'none'}}>personal</Link>
                     </li>
 
                     <li>
                         <span className={`${classes.statusdot} ${classes.green}`}></span>
-                        <span style={{textAlign:'center', padding:'0', margin:'0', paddingLeft:'4px',  cursor:'pointer'}}>Freelance</span>
+                        <Link to="/green" style={{textAlign:'center', padding:'0', margin:'0', paddingLeft:'4px',  cursor:'pointer', textDecoration:'none'}}>Freelance</Link>
                     </li>
 
                     <li>
                         <span className={`${classes.statusdot} ${classes.yellow}`}></span>
-                        <span style={{textAlign:'center', padding:'0', margin:'0', paddingLeft:'4px',  cursor:'pointer'}}>Work</span>
+                        <Link to='/yellow' style={{textAlign:'center', padding:'0', margin:'0', paddingLeft:'4px',  cursor:'pointer', textDecoration:'none'}}>Work</Link>
                     </li>
                 </ul>
             </div>

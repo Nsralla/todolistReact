@@ -2,7 +2,7 @@ import './App.css'
 import MainPage from './components/MainPage'
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import RightSection from './components/RightSection';
-import Alltodos from '../src/Pages/Alltodos.jsx';
+import SpecificTodo from './Pages/SpecificTodo.jsx';
 const router = createBrowserRouter([
   {
     path:'/',
@@ -12,10 +12,10 @@ const router = createBrowserRouter([
       {
       path:'/addTodo',
       element:<RightSection/>,
-    },
+      },
     {
-      path:'/displayAll',
-      element:<Alltodos/>
+      path:'/:todoId',
+      element:<SpecificTodo/>
     }]
   },
 ]);
