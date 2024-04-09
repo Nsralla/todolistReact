@@ -18,6 +18,15 @@ const todoListSlice = createSlice({
         removeTodo: (state, action) => {
         return state.filter((todo)=>(todo.id !== action.payload))
         },
+        removeMultipleTodos: (state, action) => {
+            // Extract just the IDs from the action's payload of todo objects
+            const idsToRemove = action.payload.map(todo => todo.id);
+
+            // Filter out todos whose IDs are in the idsToRemove array
+            return state.filter(todo => !idsToRemove.includes(todo.id));
+        },
+
+
         toggleDone(state, action) {
                 return state.map((item) => {
                 if (item.id === action.payload) {
@@ -42,7 +51,7 @@ const todoListSlice = createSlice({
     });
 
     // Destructure the actions from the todoListSlice
-    export const { addTodo, removeTodo, editTodo, setTodos, toggleDone } = todoListSlice.actions;
+    export const { addTodo, removeTodo, editTodo, setTodos, toggleDone, removeMultipleTodos } = todoListSlice.actions;
 
     // Configure the store with the reducer
     const store = configureStore({

@@ -5,7 +5,7 @@ import { getAnalytics } from "firebase/analytics";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { addTodo, editTodo, removeTodo, setTodos, toggleDone } from "../store/index.js";
 import {  doc } from "firebase/firestore";
-
+import {removeMultipleTodos} from '../store/index.js'
 
 
 const firebaseConfig = {
@@ -66,8 +66,6 @@ export const toggleTodoAsync = (todo) => async (dispatch) => {
 
 export const handleUpdate = (id, newTitle) => async(dispatch)=>{
     try{
-        console.log("handleUpdate");
-        console.log(2, id, newTitle);
          // Update in Firestore
         const todoRef = doc(db, "todos", id);
         await updateDoc(todoRef, { title: newTitle });
@@ -78,6 +76,22 @@ export const handleUpdate = (id, newTitle) => async(dispatch)=>{
         console.error(error);
     }
 };
+
+export const deleteSetTodos = (doneTodos) => async (dispatch)=>{
+    const deletePromises = doneTodos.map((todo) => {
+        const todoRef = doc(db, "todos", todo.id);
+        return deleteDoc(todoRef);
+    });
+
+    try {
+        await Promise.all(deletePromises);
+        dispatch(removeMultipleTodos(doneTodos));
+        console.log("All selected todos have been deleted successfully.");
+        // Update local state or UI here if necessary
+    } catch (error) {
+        console.error("Error deleting todos:", error);
+    }
+}
 
 
 

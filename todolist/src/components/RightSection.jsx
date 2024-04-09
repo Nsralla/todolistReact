@@ -5,6 +5,7 @@ import {addTodoAsync, deleteTodoAsync, fetchTodos} from '../db/index.js';
 import { useDispatch } from "react-redux";
 import { toggleTodoAsync } from '../db/index.js';
 import { handleUpdate } from '../db/index.js';
+import {deleteSetTodos} from '../db/index.js'
 export default function RightSection(){
 
     const [isLoading, setIsLoading] = useState(false);
@@ -60,10 +61,8 @@ export default function RightSection(){
 
 // handle toggle
 async function handleToggle(todo) {
-    console.log(1);
     setIsLoading(true);
     await dispatch(toggleTodoAsync(todo));
-    console.log(2);
     setIsLoading(false);
 }
 
@@ -75,11 +74,23 @@ async function handleChangingTask(id, newTitle){
     setEditingId(null);
 }
 
+// handle delete set of todos
+async function handleDeleteSetTodos(){
+    setIsLoading(true);
+    // collect all todos with isDone = true
+    const doneTodos = todolist.filter((todo)=>{return(todo.isDone === true)});
+    await dispatch(deleteSetTodos(doneTodos));
+    setIsLoading(false);
+    
+}
+
     return (
     <div className={classes.rightsideMainDiv}>
         <h2>Today Main Focus</h2>
-        <h1>Add Teams Meetings</h1>
-
+        <div style={{display:'flex',justifyContent:'space-between', alignItems:'center', width:'80%'}}>
+            <h1>Add Teams Meetings </h1>
+            <button onClick={handleDeleteSetTodos} className={`${classes.bn632hover} ${classes.bn25}`}>Delete All</button>
+        </div>
         <div className={classes.taskinputDiv}>
             <span style={{cursor:'pointer'}} onClick={()=>{handleColorType('blue','personal')}} className={`${classes.statusdot} ${classes.blue}`}></span>
             <span style={{cursor:'pointer'}}  onClick={()=>{handleColorType('green','freelance')}} className={`${classes.statusdot} ${classes.green}`}></span>
