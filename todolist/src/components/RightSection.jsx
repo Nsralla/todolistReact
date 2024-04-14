@@ -18,7 +18,6 @@ export default function RightSection(){
     const [type, setType] = useState("freelance");
     const inputRef = useRef();
     const timeRef = useRef();
-
     const {handleDeleteTodo, error} = UseDeleteTodo();
 
 
