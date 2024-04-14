@@ -1,12 +1,13 @@
 import classes from './rightsection.module.css';
 import {useSelector} from 'react-redux';
 import {  useCallback, useEffect, useRef, useState } from 'react';
-import {addTodoAsync, deleteTodoAsync, fetchTodos} from '../db/index.js';
+import {addTodoAsync, fetchTodos} from '../db/index.js';
 import { useDispatch } from "react-redux";
 import { toggleTodoAsync } from '../db/index.js';
 import { handleUpdate } from '../db/index.js';
 import {deleteSetTodos} from '../db/index.js'
 import Span from '../Pages/Span.jsx';
+import { UseDeleteTodo } from '../Hooks/UseDeleteTodo.jsx';
 export default function RightSection(){
 
     const [isLoading, setIsLoading] = useState(false);
@@ -18,9 +19,11 @@ export default function RightSection(){
     const inputRef = useRef();
     const timeRef = useRef();
 
+    const {handleDeleteTodo, error} = UseDeleteTodo();
+
 
     // FETCH TODOS FROM DATA BASE
-    useEffect(()=>{
+useEffect(()=>{
         async function fetchtodosDb(){
             setIsLoading(true);
             await dispatch(fetchTodos());
@@ -29,6 +32,15 @@ export default function RightSection(){
         fetchtodosDb();
     },[dispatch]);
 
+
+async function onDelete(id){
+    setIsLoading(true);
+    await handleDeleteTodo(id);
+    if(!error){
+        console.log("deleting successfully");
+    }
+    setIsLoading(false);
+}
 
 //  handle adding todo
 const handleSubmit = useCallback(async(event)=>{
@@ -43,15 +55,6 @@ const handleSubmit = useCallback(async(event)=>{
 },[dispatch, color, type]);
 
 
-const handleDeleteTodo = useCallback(async(id)=>{
-setIsLoading(true);
-        try {
-            await dispatch(deleteTodoAsync(id)); // Corrected the typo here
-        } catch (error) {
-            console.error("Error deleting todo: ", error);
-        }
-setIsLoading(false);
-},[dispatch]);
 
 // handle choosing the color and the type
 const handleColorType = useCallback((color, type)=>{
@@ -109,6 +112,8 @@ const handleDeleteSetTodos = useCallback(async()=>{
                                     <div className={classes.loading}>     
                                     </div>
                                 </div>}
+{/* {show error} */}
+        {error && <h2>Error deleting the todo {error}</h2>}
 {/* PRINT TODOS */}
         {todolist.length > 0  && todolist.map((todo)=>(
             <div key={todo.id} className={classes.todoItem }>
@@ -127,7 +132,7 @@ const handleDeleteSetTodos = useCallback(async()=>{
                         <div className={classes.actionsDiv}>
                             <p>{todo.time}</p>
                             <i style={{cursor:"pointer"}} className="fa-solid fa-pen" onClick={() => setEditingId(todo.id)}></i>
-                            <i style={{cursor:"pointer"}} className="fa-solid fa-trash" onClick={()=>handleDeleteTodo(todo.id)}></i>
+                            <i style={{cursor:"pointer"}} className="fa-solid fa-trash" onClick={()=>onDelete(todo.id)}></i>
                         </div>
             </div>
         ))}
