@@ -4,10 +4,10 @@ import {  useCallback, useEffect, useRef, useState } from 'react';
 import {addTodoAsync, fetchTodos} from '../db/index.js';
 import { useDispatch } from "react-redux";
 import { toggleTodoAsync } from '../db/index.js';
-import { handleUpdate } from '../db/index.js';
 import {deleteSetTodos} from '../db/index.js'
 import Span from '../Pages/Span.jsx';
 import { UseDeleteTodo } from '../Hooks/UseDeleteTodo.jsx';
+import { UseEditTodo } from '../Hooks/UseEditTodo.jsx';
 export default function RightSection(){
 
     const [isLoading, setIsLoading] = useState(false);
@@ -19,6 +19,7 @@ export default function RightSection(){
     const inputRef = useRef();
     const timeRef = useRef();
     const {handleDeleteTodo, error} = UseDeleteTodo();
+    const { handleChangingTask, editError } = UseEditTodo();
 
 
     // FETCH TODOS FROM DATA BASE
@@ -68,12 +69,6 @@ const handleToggle = useCallback(async(todo)=>{
     setIsLoading(false);
 },[dispatch]);
 
-// Assuming `handleChangingTask` is defined inside a React component
-const handleChangingTask = useCallback(async(id,newTitle)=>{
-    await dispatch(handleUpdate(id, newTitle));
-    setEditingId(null);
-},[dispatch]);
-
 // handle delete set of todos
 const handleDeleteSetTodos = useCallback(async()=>{
     setIsLoading(true);
@@ -83,6 +78,16 @@ const handleDeleteSetTodos = useCallback(async()=>{
     setIsLoading(false);
 },[dispatch, todolist]);
 
+// handel editing the todo
+async function handleEditTodo(id, newTitle){
+    setIsLoading(true)
+    await handleChangingTask(id, newTitle);
+    if(!editError){
+        console.error("error editing");
+    }
+    setIsLoading(false);
+}
+
 
     return (
     <div className={classes.rightsideMainDiv}>
@@ -91,6 +96,7 @@ const handleDeleteSetTodos = useCallback(async()=>{
             <h1>Add Teams Meetings </h1>
             <button onClick={handleDeleteSetTodos} className={`${classes.bn632hover} ${classes.bn25}`}>Delete All</button>
         </div>
+        
         <div className={classes.taskinputDiv}>
             <Span handleColorType={handleColorType} color='blue' functional='personal'/>
             <Span handleColorType={handleColorType} color='green' functional='freelance'/>
@@ -107,10 +113,9 @@ const handleDeleteSetTodos = useCallback(async()=>{
         </div>
 
 {/* Loading spinner */}
-        {(isLoading )&& <div className={classes.loadingstate}>
-                                    <div className={classes.loading}>     
-                                    </div>
-                                </div>}
+        {(isLoading )&& <div className={classes.loadingstate}><div className={classes.loading}>     
+            </div>
+        </div>}
 {/* {show error} */}
         {error && <h2>Error deleting the todo {error}</h2>}
 {/* PRINT TODOS */}
@@ -124,7 +129,7 @@ const handleDeleteSetTodos = useCallback(async()=>{
                             className={`${classes[todo.color]} ${classes.statusdot}`}>
                         </span>
                         {editingId === todo.id ? (
-                        <input  style={{width:'80%'}} defaultValue={todo.title} onBlur={(e) => {handleChangingTask(todo.id, e.target.value)}} />
+                        <input  style={{width:'80%'}} defaultValue={todo.title} onBlur={(e) => {handleEditTodo(todo.id, e.target.value)}} />
                         ) : (
                         <p>{todo.title}</p>
                         )}
